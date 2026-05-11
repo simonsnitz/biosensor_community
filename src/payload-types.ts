@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    seminars: Seminar;
+    people: Person;
+    faqs: Faq;
     media: Media;
     categories: Category;
     users: User;
@@ -86,6 +89,9 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    seminars: SeminarsSelect<false> | SeminarsSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -106,10 +112,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -749,6 +757,127 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Monthly seminars. Time is always 12:00 PM ET.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seminars".
+ */
+export interface Seminar {
+  id: number;
+  title: string;
+  /**
+   * Seminar date. Time is always 12:00 PM ET.
+   */
+  date: string;
+  /**
+   * One or more speakers. Filtered to People with the Speaker role.
+   */
+  speakers: (number | Person)[];
+  flyerImage?: (number | null) | Media;
+  /**
+   * Zoom registration link. Shown for upcoming seminars.
+   */
+  zoomRegistrationUrl?: string | null;
+  /**
+   * YouTube link to the recording. Shown for past seminars.
+   */
+  youtubeUrl?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
+  id: number;
+  name: string;
+  /**
+   * Job title or position (e.g., "Assistant Professor")
+   */
+  title?: string | null;
+  /**
+   * Institution or lab
+   */
+  affiliation?: string | null;
+  photo?: (number | null) | Media;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * A person can have multiple roles.
+   */
+  roles: ('speaker' | 'organizer' | 'researcher')[];
+  /**
+   * Research focus areas. Multiple can be selected.
+   */
+  focus?: ('microbiology' | 'biomanufacturing' | 'diagnostics' | 'environment')[] | null;
+  links?:
+    | {
+        type: 'website' | 'email' | 'twitter' | 'linkedin' | 'github' | 'scholar' | 'orcid' | 'other';
+        url: string;
+        /**
+         * Optional custom label (shown instead of the type name).
+         */
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -945,6 +1074,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'seminars';
+        value: number | Seminar;
+      } | null)
+    | ({
+        relationTo: 'people';
+        value: number | Person;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
       } | null)
     | ({
         relationTo: 'media';
@@ -1181,6 +1322,58 @@ export interface PostsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seminars_select".
+ */
+export interface SeminarsSelect<T extends boolean = true> {
+  title?: T;
+  date?: T;
+  speakers?: T;
+  flyerImage?: T;
+  zoomRegistrationUrl?: T;
+  youtubeUrl?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  affiliation?: T;
+  photo?: T;
+  bio?: T;
+  roles?: T;
+  focus?: T;
+  links?:
+    | T
+    | {
+        type?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1641,6 +1834,50 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Shown in the homepage hero.
+   */
+  missionStatement?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Manually pin a seminar to the hero. Leave empty to auto-select the next upcoming seminar.
+   */
+  featuredSeminar?: (number | null) | Seminar;
+  signupFormUrl?: string | null;
+  nominateFormUrl?: string | null;
+  socialLinks?:
+    | {
+        platform: 'youtube' | 'linkedin' | 'twitter' | 'github' | 'email' | 'other';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Used to POST signups to https://buttondown.com/api/emails/embed-subscribe/<username>. Leave blank to hide the signup form.
+   */
+  buttondownUsername?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1681,6 +1918,27 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  missionStatement?: T;
+  featuredSeminar?: T;
+  signupFormUrl?: T;
+  nominateFormUrl?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  buttondownUsername?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

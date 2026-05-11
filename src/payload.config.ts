@@ -5,12 +5,16 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { FAQs } from './collections/FAQs'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { People } from './collections/People'
 import { Posts } from './collections/Posts'
+import { Seminars } from './collections/Seminars'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { SiteSettings } from './globals/SiteSettings'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -66,12 +70,15 @@ export default buildConfig({
   collections: [
     Pages,
     Posts,
+    Seminars,
+    People,
+    FAQs,
     Media,
     Categories,
     Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
