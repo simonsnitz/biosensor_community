@@ -5,15 +5,27 @@ import type { Page } from '@/payload-types'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FAQsListBlock } from '@/blocks/FAQsList/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { MailingListSignupBlock } from '@/blocks/MailingListSignup/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { NextSeminarBlock } from '@/blocks/NextSeminar/Component'
+import { PastSeminarsBlock } from '@/blocks/PastSeminars/Component'
+import { PeopleGridBlock } from '@/blocks/PeopleGrid/Component'
+import { SiteIntroBlock } from '@/blocks/SiteIntro/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  faqsList: FAQsListBlock,
   formBlock: FormBlock,
+  mailingListSignup: MailingListSignupBlock,
   mediaBlock: MediaBlock,
+  nextSeminar: NextSeminarBlock,
+  pastSeminars: PastSeminarsBlock,
+  peopleGrid: PeopleGridBlock,
+  siteIntro: SiteIntroBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -33,8 +45,9 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
+              const spacing = index === 0 ? 'mb-16' : 'my-16'
               return (
-                <div className="my-16" key={index}>
+                <div className={spacing} key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>

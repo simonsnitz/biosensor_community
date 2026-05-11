@@ -203,7 +203,19 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | SiteIntroBlock
+    | NextSeminarBlock
+    | PastSeminarsBlock
+    | PeopleGridBlock
+    | FAQsListBlock
+    | MailingListSignupBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -413,6 +425,91 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SiteIntroBlock".
+ */
+export interface SiteIntroBlock {
+  heading: string;
+  /**
+   * Smaller text shown below the heading.
+   */
+  subheading?: string | null;
+  image?: (number | null) | Media;
+  imagePosition?: ('right' | 'left') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'siteIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NextSeminarBlock".
+ */
+export interface NextSeminarBlock {
+  heading?: string | null;
+  showWhenNone?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'nextSeminar';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PastSeminarsBlock".
+ */
+export interface PastSeminarsBlock {
+  heading?: string | null;
+  /**
+   * How many past seminars to show.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pastSeminars';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PeopleGridBlock".
+ */
+export interface PeopleGridBlock {
+  heading?: string | null;
+  /**
+   * Filter People by this role.
+   */
+  role: 'organizer' | 'speaker' | 'researcher';
+  /**
+   * Optional: only show people tagged with one of these focus areas. Leave empty for no filter.
+   */
+  focus?: ('microbiology' | 'biomanufacturing' | 'diagnostics' | 'environment')[] | null;
+  /**
+   * 0 means no limit.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'peopleGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQsListBlock".
+ */
+export interface FAQsListBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqsList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MailingListSignupBlock".
+ */
+export interface MailingListSignupBlock {
+  heading?: string | null;
+  blurb?: string | null;
+  buttonLabel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mailingListSignup';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1188,6 +1285,12 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        siteIntro?: T | SiteIntroBlockSelect<T>;
+        nextSeminar?: T | NextSeminarBlockSelect<T>;
+        pastSeminars?: T | PastSeminarsBlockSelect<T>;
+        peopleGrid?: T | PeopleGridBlockSelect<T>;
+        faqsList?: T | FAQsListBlockSelect<T>;
+        mailingListSignup?: T | MailingListSignupBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1207,6 +1310,70 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SiteIntroBlock_select".
+ */
+export interface SiteIntroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  image?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NextSeminarBlock_select".
+ */
+export interface NextSeminarBlockSelect<T extends boolean = true> {
+  heading?: T;
+  showWhenNone?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PastSeminarsBlock_select".
+ */
+export interface PastSeminarsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PeopleGridBlock_select".
+ */
+export interface PeopleGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  role?: T;
+  focus?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQsListBlock_select".
+ */
+export interface FAQsListBlockSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MailingListSignupBlock_select".
+ */
+export interface MailingListSignupBlockSelect<T extends boolean = true> {
+  heading?: T;
+  blurb?: T;
+  buttonLabel?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
