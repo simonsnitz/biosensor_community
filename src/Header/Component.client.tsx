@@ -29,12 +29,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/" aria-label="Home" className="sr-only">
-          Home
+    <header
+      className="sticky top-0 z-30 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b border-border/60"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="mx-auto max-w-6xl px-6 md:px-10 py-5 flex items-center justify-between">
+        <Link
+          href="/"
+          className="font-display font-bold text-base md:text-lg tracking-tight text-foreground"
+        >
+          Biosensor Community
         </Link>
-        <div />
         <HeaderNav data={data} />
       </div>
     </header>

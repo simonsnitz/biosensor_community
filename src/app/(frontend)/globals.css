@@ -45,6 +45,7 @@
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-geist-sans);
 }
 
 @layer utilities {
@@ -86,26 +87,34 @@
   }
 }
 
-:root {
-  --background: oklch(100% 0 0deg);
-  --foreground: oklch(14.5% 0 0deg);
-  --card: oklch(96.5% 0.005 265deg);
-  --card-foreground: oklch(14.5% 0 0deg);
-  --popover: oklch(100% 0 0deg);
-  --popover-foreground: oklch(14.5% 0 0deg);
-  --primary: oklch(20.5% 0 0deg);
-  --primary-foreground: oklch(98.5% 0 0deg);
-  --secondary: oklch(97% 0 0deg);
-  --secondary-foreground: oklch(20.5% 0 0deg);
-  --muted: oklch(97% 0 0deg);
-  --muted-foreground: oklch(55.6% 0 0deg);
-  --accent: oklch(97% 0 0deg);
-  --accent-foreground: oklch(20.5% 0 0deg);
-  --destructive: oklch(57.7% 0.245 27.325deg);
-  --destructive-foreground: oklch(57.7% 0.245 27.325deg);
-  --border: oklch(92.2% 0 0deg);
-  --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+/*
+ * Biosensor Community palette — warm cream background with near-black text and
+ * a muted sage accent, inspired by isomorphiclabs.com. Same colors regardless
+ * of the data-theme value Payload sets, so the site has a single locked-in
+ * aesthetic.
+ */
+:root,
+[data-theme='dark'],
+[data-theme='light'] {
+  --background: oklch(96% 0.015 85deg);
+  --foreground: oklch(20% 0.012 80deg);
+  --card: oklch(98% 0.012 85deg);
+  --card-foreground: oklch(20% 0.012 80deg);
+  --popover: oklch(98% 0.012 85deg);
+  --popover-foreground: oklch(20% 0.012 80deg);
+  --primary: oklch(38% 0.04 175deg);
+  --primary-foreground: oklch(97% 0.015 85deg);
+  --secondary: oklch(92% 0.018 85deg);
+  --secondary-foreground: oklch(20% 0.012 80deg);
+  --muted: oklch(92% 0.015 85deg);
+  --muted-foreground: oklch(45% 0.015 80deg);
+  --accent: oklch(70% 0.06 170deg);
+  --accent-foreground: oklch(20% 0.012 80deg);
+  --destructive: oklch(55% 0.18 25deg);
+  --destructive-foreground: oklch(97% 0.015 85deg);
+  --border: oklch(85% 0.015 85deg);
+  --input: oklch(85% 0.015 85deg);
+  --ring: oklch(70% 0.06 170deg);
   --chart-1: oklch(64.6% 0.222 41.116deg);
   --chart-2: oklch(60% 0.118 184.704deg);
   --chart-3: oklch(39.8% 0.07 227.392deg);
@@ -125,43 +134,7 @@
   --error: oklch(75% 0.15 25deg);
 }
 
-[data-theme='dark'] {
-  --background: oklch(14.5% 0 0deg);
-  --foreground: oklch(98.5% 0 0deg);
-  --card: oklch(17% 0 0deg);
-  --card-foreground: oklch(98.5% 0 0deg);
-  --popover: oklch(14.5% 0 0deg);
-  --popover-foreground: oklch(98.5% 0 0deg);
-  --primary: oklch(98.5% 0 0deg);
-  --primary-foreground: oklch(20.5% 0 0deg);
-  --secondary: oklch(26.9% 0 0deg);
-  --secondary-foreground: oklch(98.5% 0 0deg);
-  --muted: oklch(26.9% 0 0deg);
-  --muted-foreground: oklch(70.8% 0 0deg);
-  --accent: oklch(26.9% 0 0deg);
-  --accent-foreground: oklch(98.5% 0 0deg);
-  --destructive: oklch(39.6% 0.141 25.723deg);
-  --destructive-foreground: oklch(63.7% 0.237 25.331deg);
-  --border: oklch(26.9% 0 0deg);
-  --input: oklch(26.9% 0 0deg);
-  --ring: oklch(43.9% 0 0deg);
-  --chart-1: oklch(48.8% 0.243 264.376deg);
-  --chart-2: oklch(69.6% 0.17 162.48deg);
-  --chart-3: oklch(76.9% 0.188 70.08deg);
-  --chart-4: oklch(62.7% 0.265 303.9deg);
-  --chart-5: oklch(64.5% 0.246 16.439deg);
-  --sidebar: oklch(20.5% 0 0deg);
-  --sidebar-foreground: oklch(98.5% 0 0deg);
-  --sidebar-primary: oklch(48.8% 0.243 264.376deg);
-  --sidebar-primary-foreground: oklch(98.5% 0 0deg);
-  --sidebar-accent: oklch(26.9% 0 0deg);
-  --sidebar-accent-foreground: oklch(98.5% 0 0deg);
-  --sidebar-border: oklch(26.9% 0 0deg);
-  --sidebar-ring: oklch(43.9% 0 0deg);
-  --success: oklch(28% 0.1 200deg);
-  --warning: oklch(35% 0.08 70deg);
-  --error: oklch(45% 0.1 25deg);
-}
+/* Dark/light theme overrides removed — single palette in :root above. */
 
 @theme inline {
   --color-background: var(--background);
@@ -210,7 +183,17 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    /* Faint yellow-green at the top → light blue at the bottom. Low chroma
+       keeps the gradient subtle behind text. `fixed` attachment so the
+       gradient anchors to the viewport, not the document length. */
+    background: linear-gradient(
+      to bottom,
+      oklch(96% 0.038 115deg) 0%,
+      oklch(94% 0.025 160deg) 45%,
+      oklch(93% 0.04 230deg) 100%
+    );
+    background-attachment: fixed;
+    @apply text-foreground min-h-[100vh] flex flex-col;
   }
 }
 

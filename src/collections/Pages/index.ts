@@ -5,12 +5,14 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
+import { DividerBlock } from '../../blocks/Divider/config'
 import { FAQsList } from '../../blocks/FAQsList/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MailingListSignup } from '../../blocks/MailingListSignup/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { NextSeminar } from '../../blocks/NextSeminar/config'
 import { PastSeminars } from '../../blocks/PastSeminars/config'
+import { PeopleDirectory } from '../../blocks/PeopleDirectory/config'
 import { PeopleGrid } from '../../blocks/PeopleGrid/config'
 import { SiteIntro } from '../../blocks/SiteIntro/config'
 import { hero } from '@/heros/config'
@@ -80,8 +82,10 @@ export const Pages: CollectionConfig<'pages'> = {
               type: 'blocks',
               blocks: [
                 SiteIntro,
+                DividerBlock,
                 NextSeminar,
                 PastSeminars,
+                PeopleDirectory,
                 PeopleGrid,
                 FAQsList,
                 MailingListSignup,

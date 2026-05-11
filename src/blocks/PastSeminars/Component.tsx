@@ -1,5 +1,6 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import Link from 'next/link'
 import React from 'react'
 
 import type {
@@ -7,6 +8,7 @@ import type {
   Seminar,
   Person,
 } from '@/payload-types'
+import { Section } from '@/components/Section'
 import { seminarDisplayDate, youtubeEmbedUrl } from '@/utilities/seminar'
 
 export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ heading, limit }) => {
@@ -24,46 +26,59 @@ export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ head
   if (seminars.length === 0) return null
 
   return (
-    <section className="container mx-auto px-4">
-      <h2 className="text-3xl font-semibold mb-6">{heading || 'Past Seminars'}</h2>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <Section
+      heading={heading || 'Past Seminars'}
+      compact
+      className="bg-white pt-8 md:pt-12"
+    >
+      <div className="grid gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-3">
         {seminars.map((s) => {
           const embed = youtubeEmbedUrl(s.youtubeUrl)
           const speakers = Array.isArray(s.speakers)
             ? (s.speakers.filter((p) => typeof p === 'object') as Person[])
             : []
           return (
-            <article key={s.id} className="flex flex-col gap-2">
-              {embed ? (
-                <div className="aspect-video w-full">
-                  <iframe
-                    src={embed}
-                    title={s.title}
-                    className="w-full h-full rounded"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+            <article key={s.id} className="flex flex-col gap-4">
+              <Link href={`/seminars/${s.slug}`} className="group block">
+                {embed ? (
+                  <div className="aspect-video w-full overflow-hidden rounded-xl border border-border">
+                    <iframe
+                      src={embed}
+                      title={s.title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : s.flyerImage && typeof s.flyerImage === 'object' && s.flyerImage.url ? (
+                  <img
+                    src={s.flyerImage.url}
+                    alt={s.flyerImage.alt || s.title}
+                    className="aspect-video object-cover rounded-xl w-full border border-border transition group-hover:opacity-90"
                   />
-                </div>
-              ) : s.flyerImage && typeof s.flyerImage === 'object' && s.flyerImage.url ? (
-                <img
-                  src={s.flyerImage.url}
-                  alt={s.flyerImage.alt || s.title}
-                  className="aspect-video object-cover rounded w-full"
-                />
-              ) : (
-                <div className="aspect-video rounded bg-muted" />
-              )}
-              <h3 className="text-lg font-medium leading-tight">{s.title}</h3>
-              {speakers.length > 0 && (
-                <p className="text-sm text-muted-foreground">
-                  {speakers.map((sp) => sp.name).join(', ')}
+                ) : (
+                  <div className="aspect-video rounded-xl bg-muted" />
+                )}
+              </Link>
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground mb-2">
+                  {seminarDisplayDate(s.date)}
                 </p>
-              )}
-              <p className="text-xs text-muted-foreground">{seminarDisplayDate(s.date)}</p>
+                <Link href={`/seminars/${s.slug}`}>
+                  <h3 className="text-xl text-foreground leading-tight hover:underline underline-offset-4">
+                    {s.title}
+                  </h3>
+                </Link>
+                {speakers.length > 0 && (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {speakers.map((sp) => sp.name).join(', ')}
+                  </p>
+                )}
+              </div>
             </article>
           )
         })}
       </div>
-    </section>
+    </Section>
   )
 }

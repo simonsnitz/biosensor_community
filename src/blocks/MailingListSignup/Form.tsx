@@ -28,11 +28,11 @@ export const ButtondownForm: React.FC<Props> = ({ username, buttonLabel }) => {
         name="email"
         required
         placeholder="you@example.com"
-        className="flex-1 px-4 py-2 rounded border bg-background"
+        className="flex-1 px-5 py-3 rounded-full border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
       />
       <button
         type="submit"
-        className="px-5 py-2 rounded bg-primary text-primary-foreground font-medium"
+        className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-display font-semibold text-sm uppercase tracking-wider transition hover:opacity-90"
       >
         {buttonLabel}
       </button>

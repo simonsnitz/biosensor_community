@@ -205,8 +205,10 @@ export interface Page {
   };
   layout: (
     | SiteIntroBlock
+    | DividerBlock
     | NextSeminarBlock
     | PastSeminarsBlock
+    | PeopleDirectoryBlock
     | PeopleGridBlock
     | FAQsListBlock
     | MailingListSignupBlock
@@ -444,6 +446,15 @@ export interface SiteIntroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DividerBlock".
+ */
+export interface DividerBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'divider';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "NextSeminarBlock".
  */
 export interface NextSeminarBlock {
@@ -466,6 +477,20 @@ export interface PastSeminarsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'pastSeminars';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PeopleDirectoryBlock".
+ */
+export interface PeopleDirectoryBlock {
+  heading?: string | null;
+  /**
+   * Optional intro text shown above the filters.
+   */
+  intro?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'peopleDirectory';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1286,8 +1311,10 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         siteIntro?: T | SiteIntroBlockSelect<T>;
+        divider?: T | DividerBlockSelect<T>;
         nextSeminar?: T | NextSeminarBlockSelect<T>;
         pastSeminars?: T | PastSeminarsBlockSelect<T>;
+        peopleDirectory?: T | PeopleDirectoryBlockSelect<T>;
         peopleGrid?: T | PeopleGridBlockSelect<T>;
         faqsList?: T | FAQsListBlockSelect<T>;
         mailingListSignup?: T | MailingListSignupBlockSelect<T>;
@@ -1325,6 +1352,14 @@ export interface SiteIntroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DividerBlock_select".
+ */
+export interface DividerBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "NextSeminarBlock_select".
  */
 export interface NextSeminarBlockSelect<T extends boolean = true> {
@@ -1340,6 +1375,16 @@ export interface NextSeminarBlockSelect<T extends boolean = true> {
 export interface PastSeminarsBlockSelect<T extends boolean = true> {
   heading?: T;
   limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PeopleDirectoryBlock_select".
+ */
+export interface PeopleDirectoryBlockSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
   id?: T;
   blockName?: T;
 }

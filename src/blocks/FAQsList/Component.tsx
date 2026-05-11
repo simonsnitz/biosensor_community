@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import RichText from '@/components/RichText'
+import { Section } from '@/components/Section'
 import type { FAQsListBlock as FAQsListBlockProps, Faq } from '@/payload-types'
 
 export const FAQsListBlock: React.FC<FAQsListBlockProps> = async ({ heading }) => {
@@ -17,21 +18,25 @@ export const FAQsListBlock: React.FC<FAQsListBlockProps> = async ({ heading }) =
   if (faqs.length === 0) return null
 
   return (
-    <section className="container mx-auto px-4 max-w-3xl">
-      <h2 className="text-3xl font-semibold mb-6">{heading}</h2>
-      <div className="space-y-4">
+    <Section heading={heading} width="narrow">
+      <div className="divide-y divide-border border-t border-b border-border">
         {faqs.map((faq) => (
-          <details key={faq.id} className="border-b pb-3">
-            <summary className="cursor-pointer font-medium py-2 list-none flex justify-between items-center">
+          <details key={faq.id} className="group">
+            <summary className="cursor-pointer list-none flex justify-between items-center gap-4 py-5 font-display font-semibold text-lg text-foreground">
               <span>{faq.question}</span>
-              <span className="text-2xl leading-none">+</span>
+              <span
+                aria-hidden
+                className="text-2xl leading-none transition-transform group-open:rotate-45 text-muted-foreground"
+              >
+                +
+              </span>
             </summary>
-            <div className="pt-2 text-muted-foreground">
+            <div className="pb-6 -mt-1 text-muted-foreground max-w-none">
               <RichText data={faq.answer} enableGutter={false} />
             </div>
           </details>
         ))}
       </div>
-    </section>
+    </Section>
   )
 }
