@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { Section } from '@/components/Section'
 import type { MailingListSignupBlock as MailingListSignupBlockProps } from '@/payload-types'
 import { ButtondownForm } from './Form'
 
@@ -23,10 +24,10 @@ export const MailingListSignupBlock: React.FC<MailingListSignupBlockProps> = asy
   if (!username) return null
 
   return (
-    <section className="container mx-auto px-4 max-w-2xl text-center">
-      <h2 className="text-3xl font-semibold mb-3">{heading}</h2>
-      {blurb && <p className="text-muted-foreground mb-6">{blurb}</p>}
+    <Section width="narrow" className="text-center">
+      <h2 className="text-4xl md:text-5xl mb-4">{heading}</h2>
+      {blurb && <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">{blurb}</p>}
       <ButtondownForm username={username} buttonLabel={buttonLabel || 'Subscribe'} />
-    </section>
+    </Section>
   )
 }

@@ -3,6 +3,7 @@ import { getPayload, type Where } from 'payload'
 import React from 'react'
 
 import type { PeopleGridBlock as PeopleGridBlockProps, Person } from '@/payload-types'
+import { Section } from '@/components/Section'
 
 export const PeopleGridBlock: React.FC<PeopleGridBlockProps> = async ({
   heading,
@@ -29,28 +30,32 @@ export const PeopleGridBlock: React.FC<PeopleGridBlockProps> = async ({
   if (people.length === 0) return null
 
   return (
-    <section className="container mx-auto px-4">
-      <h2 className="text-3xl font-semibold mb-6">{heading}</h2>
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {people.map((p) => (
-          <div key={p.id} className="flex flex-col items-start gap-2">
-            {p.photo && typeof p.photo === 'object' && p.photo.url && (
-              <img
-                src={p.photo.url}
-                alt={p.photo.alt || p.name}
-                className="w-32 h-32 rounded-full object-cover"
-              />
-            )}
-            <div>
-              <p className="font-medium">{p.name}</p>
-              {p.title && <p className="text-sm text-muted-foreground">{p.title}</p>}
-              {p.affiliation && (
-                <p className="text-sm text-muted-foreground">{p.affiliation}</p>
+    <Section heading={heading} compact>
+      <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {people.map((p) => {
+          const photo = p.photo && typeof p.photo === 'object' ? p.photo : null
+          return (
+            <div key={p.id} className="flex flex-col items-start gap-3">
+              {photo?.url ? (
+                <img
+                  src={photo.url}
+                  alt={photo.alt || p.name}
+                  className="w-28 h-28 rounded-full object-cover border border-border"
+                />
+              ) : (
+                <div className="w-28 h-28 rounded-full bg-muted border border-border" />
               )}
+              <div>
+                <p className="font-display font-semibold text-foreground">{p.name}</p>
+                {p.title && <p className="text-sm text-muted-foreground">{p.title}</p>}
+                {p.affiliation && (
+                  <p className="text-sm text-muted-foreground">{p.affiliation}</p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
-    </section>
+    </Section>
   )
 }
