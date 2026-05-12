@@ -471,7 +471,7 @@ export interface NextSeminarBlock {
 export interface PastSeminarsBlock {
   heading?: string | null;
   /**
-   * How many past seminars to show.
+   * How many past seminars to show before the "All past seminars" link.
    */
   limit?: number | null;
   id?: string | null;
@@ -499,17 +499,9 @@ export interface PeopleDirectoryBlock {
 export interface PeopleGridBlock {
   heading?: string | null;
   /**
-   * Filter People by this role.
+   * Optional intro text shown above the role tags.
    */
-  role: 'organizer' | 'speaker' | 'researcher';
-  /**
-   * Optional: only show people tagged with one of these focus areas. Leave empty for no filter.
-   */
-  focus?: ('microbiology' | 'biomanufacturing' | 'diagnostics' | 'environment')[] | null;
-  /**
-   * 0 means no limit.
-   */
-  limit?: number | null;
+  intro?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'peopleGrid';
@@ -1394,9 +1386,7 @@ export interface PeopleDirectoryBlockSelect<T extends boolean = true> {
  */
 export interface PeopleGridBlockSelect<T extends boolean = true> {
   heading?: T;
-  role?: T;
-  focus?: T;
-  limit?: T;
+  intro?: T;
   id?: T;
   blockName?: T;
 }

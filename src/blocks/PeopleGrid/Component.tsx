@@ -1,61 +1,47 @@
 import configPromise from '@payload-config'
-import { getPayload, type Where } from 'payload'
+import { getPayload } from 'payload'
+import Link from 'next/link'
 import React from 'react'
 
 import type { PeopleGridBlock as PeopleGridBlockProps, Person } from '@/payload-types'
 import { Section } from '@/components/Section'
 
-export const PeopleGridBlock: React.FC<PeopleGridBlockProps> = async ({
-  heading,
-  role,
-  focus,
-  limit,
-}) => {
+import { PeopleGridClient } from './Client'
+
+const HOMEPAGE_LIMIT = 4
+
+/**
+ * Server entry: fetches every Person doc once and hands the data to the
+ * client component which manages the tag filter UI. Cheap for our scale —
+ * the People collection is in the dozens, not thousands.
+ *
+ * On the homepage we cap to {@link HOMEPAGE_LIMIT} people and surface an
+ * "All people" link for the full directory at /people.
+ */
+export const PeopleGridBlock: React.FC<PeopleGridBlockProps> = async ({ heading, intro }) => {
   const payload = await getPayload({ config: configPromise })
-
-  const where: Where = { roles: { contains: role } }
-  if (focus && focus.length > 0) {
-    where.and = focus.map((f) => ({ focus: { contains: f } }))
-  }
-
   const result = await payload.find({
     collection: 'people',
-    where,
     sort: 'name',
-    limit: limit && limit > 0 ? limit : 1000,
+    limit: 1000,
     depth: 1,
   })
-
   const people = result.docs as Person[]
-  if (people.length === 0) return null
 
   return (
-    <Section heading={heading} compact>
-      <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {people.map((p) => {
-          const photo = p.photo && typeof p.photo === 'object' ? p.photo : null
-          return (
-            <div key={p.id} className="flex flex-col items-start gap-3">
-              {photo?.url ? (
-                <img
-                  src={photo.url}
-                  alt={photo.alt || p.name}
-                  className="w-28 h-28 rounded-full object-cover border border-border"
-                />
-              ) : (
-                <div className="w-28 h-28 rounded-full bg-muted border border-border" />
-              )}
-              <div>
-                <p className="font-display font-semibold text-foreground">{p.name}</p>
-                {p.title && <p className="text-sm text-muted-foreground">{p.title}</p>}
-                {p.affiliation && (
-                  <p className="text-sm text-muted-foreground">{p.affiliation}</p>
-                )}
-              </div>
-            </div>
-          )
-        })}
-      </div>
+    <Section heading={heading || 'People'} intro={intro || undefined}>
+      <PeopleGridClient people={people} limit={HOMEPAGE_LIMIT} />
+      {people.length > HOMEPAGE_LIMIT && (
+        <div className="mt-14">
+          <Link
+            href="/people"
+            className="inline-flex items-center gap-2 text-foreground font-medium hover:underline underline-offset-4"
+          >
+            All people
+            <span aria-hidden>→</span>
+          </Link>
+        </div>
+      )}
     </Section>
   )
 }

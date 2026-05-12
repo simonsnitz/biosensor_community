@@ -31,7 +31,7 @@ export const SiteIntroBlock: React.FC<SiteIntroBlockProps> = ({
         intentionally left-align the text rather than center within a
         page-wide container.
       */}
-      <div className="relative z-10 px-6 md:px-10 lg:pl-16 xl:pl-24 pt-20 md:pt-28 pb-16 lg:max-w-[48vw]">
+      <div className="relative z-10 px-6 md:px-10 lg:pl-16 xl:pl-24 pt-20 md:pt-28 pb-16 lg:max-w-[42vw]">
         <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground">
           {heading}
         </h1>
@@ -61,7 +61,7 @@ export const SiteIntroBlock: React.FC<SiteIntroBlockProps> = ({
           aria-hidden
           className={`hidden lg:block pointer-events-none absolute bottom-0 ${
             pinLeft ? 'left-0' : 'right-0'
-          } w-[50vw] xl:w-[45vw] max-w-[800px] max-h-[60vh] object-contain object-bottom`}
+          } w-[58vw] xl:w-[55vw] max-w-[1000px] max-h-[70vh] object-contain object-bottom`}
         />
       )}
     </section>

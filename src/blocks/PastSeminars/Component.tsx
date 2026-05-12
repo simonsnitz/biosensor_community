@@ -3,13 +3,9 @@ import { getPayload } from 'payload'
 import Link from 'next/link'
 import React from 'react'
 
-import type {
-  PastSeminarsBlock as PastSeminarsBlockProps,
-  Seminar,
-  Person,
-} from '@/payload-types'
+import type { PastSeminarsBlock as PastSeminarsBlockProps, Seminar } from '@/payload-types'
+import { PastSeminarCard } from '@/components/PastSeminarCard'
 import { Section } from '@/components/Section'
-import { seminarDisplayDate, youtubeEmbedUrl } from '@/utilities/seminar'
 
 export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ heading, limit }) => {
   const payload = await getPayload({ config: configPromise })
@@ -18,7 +14,7 @@ export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ head
     collection: 'seminars',
     where: { date: { less_than: todayISO } },
     sort: '-date',
-    limit: limit || 6,
+    limit: limit || 3,
     depth: 1,
   })
 
@@ -26,58 +22,24 @@ export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ head
   if (seminars.length === 0) return null
 
   return (
-    <Section
-      heading={heading || 'Past Seminars'}
-      compact
-      className="bg-white pt-8 md:pt-12"
-    >
+    // Larger top padding so the "Past Seminars" heading sits well below the
+    // Next Seminar card. We share the white background with NextSeminar so
+    // they read as one continuous band.
+    <Section compact className="bg-white pt-20 md:pt-24">
+      <h3 className="text-xl md:text-2xl text-foreground mb-8">{heading || 'Past Seminars'}</h3>
       <div className="grid gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-3">
-        {seminars.map((s) => {
-          const embed = youtubeEmbedUrl(s.youtubeUrl)
-          const speakers = Array.isArray(s.speakers)
-            ? (s.speakers.filter((p) => typeof p === 'object') as Person[])
-            : []
-          return (
-            <article key={s.id} className="flex flex-col gap-4">
-              <Link href={`/seminars/${s.slug}`} className="group block">
-                {embed ? (
-                  <div className="aspect-video w-full overflow-hidden rounded-xl border border-border">
-                    <iframe
-                      src={embed}
-                      title={s.title}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                ) : s.flyerImage && typeof s.flyerImage === 'object' && s.flyerImage.url ? (
-                  <img
-                    src={s.flyerImage.url}
-                    alt={s.flyerImage.alt || s.title}
-                    className="aspect-video object-cover rounded-xl w-full border border-border transition group-hover:opacity-90"
-                  />
-                ) : (
-                  <div className="aspect-video rounded-xl bg-muted" />
-                )}
-              </Link>
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground mb-2">
-                  {seminarDisplayDate(s.date)}
-                </p>
-                <Link href={`/seminars/${s.slug}`}>
-                  <h3 className="text-xl text-foreground leading-tight hover:underline underline-offset-4">
-                    {s.title}
-                  </h3>
-                </Link>
-                {speakers.length > 0 && (
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {speakers.map((sp) => sp.name).join(', ')}
-                  </p>
-                )}
-              </div>
-            </article>
-          )
-        })}
+        {seminars.map((s) => (
+          <PastSeminarCard key={s.id} seminar={s} />
+        ))}
+      </div>
+      <div className="mt-14">
+        <Link
+          href="/seminars"
+          className="inline-flex items-center gap-2 text-foreground font-medium hover:underline underline-offset-4"
+        >
+          All past seminars
+          <span aria-hidden>→</span>
+        </Link>
       </div>
     </Section>
   )
