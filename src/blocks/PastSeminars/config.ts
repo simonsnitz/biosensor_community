@@ -13,8 +13,8 @@ export const PastSeminars: Block = {
     {
       name: 'limit',
       type: 'number',
-      defaultValue: 6,
-      admin: { description: 'How many past seminars to show.' },
+      defaultValue: 3,
+      admin: { description: 'How many past seminars to show before the "All past seminars" link.' },
     },
   ],
 }
