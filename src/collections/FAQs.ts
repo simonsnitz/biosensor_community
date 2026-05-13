@@ -18,8 +18,8 @@ export const FAQs: CollectionConfig = {
   admin: {
     useAsTitle: 'question',
     defaultColumns: ['question', 'order'],
-    defaultSort: 'order',
   },
+  defaultSort: 'order',
   fields: [
     {
       name: 'question',
