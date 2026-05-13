@@ -39,8 +39,8 @@ export const Section: React.FC<SectionProps> = ({
   return (
     <section
       className={cn(
-        compact ? 'py-12 md:py-16' : 'py-20 md:py-28',
-        'px-6 md:px-10',
+        compact ? 'py-10 md:py-16' : 'py-14 md:py-28',
+        'px-5 md:px-10',
         className,
       )}
       {...rest}

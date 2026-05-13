@@ -18,7 +18,7 @@ export const FAQsListBlock: React.FC<FAQsListBlockProps> = async ({ heading }) =
   if (faqs.length === 0) return null
 
   return (
-    <Section heading={heading} width="narrow">
+    <Section heading={heading} width="narrow" className="pt-8 md:pt-10">
       <div className="divide-y divide-border border-t border-b border-border">
         {faqs.map((faq) => (
           <details key={faq.id} className="group">

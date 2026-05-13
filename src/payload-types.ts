@@ -2041,7 +2041,7 @@ export interface Footer {
 export interface SiteSetting {
   id: number;
   /**
-   * Shown in the homepage hero.
+   * Legacy field, no longer used. Edit "About text" and "Mission text" below instead.
    */
   missionStatement?: {
     root: {
@@ -2058,6 +2058,18 @@ export interface SiteSetting {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Shown under the "About" heading on the homepage. Separate paragraphs with a blank line.
+   */
+  aboutText?: string | null;
+  /**
+   * Shown under the "Mission statement" heading on the homepage. Separate paragraphs with a blank line.
+   */
+  missionText?: string | null;
+  /**
+   * Short tagline shown next to the wordmark in the footer.
+   */
+  footerTagline?: string | null;
   /**
    * Manually pin a seminar to the hero. Leave empty to auto-select the next upcoming seminar.
    */
@@ -2130,6 +2142,9 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   missionStatement?: T;
+  aboutText?: T;
+  missionText?: T;
+  footerTagline?: T;
   featuredSeminar?: T;
   signupFormUrl?: T;
   nominateFormUrl?: T;
