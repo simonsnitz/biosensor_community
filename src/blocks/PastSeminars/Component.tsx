@@ -25,9 +25,9 @@ export const PastSeminarsBlock: React.FC<PastSeminarsBlockProps> = async ({ head
     // Larger top padding so the "Past Seminars" heading sits well below the
     // Next Seminar card. We share the white background with NextSeminar so
     // they read as one continuous band.
-    <Section compact className="bg-white pt-20 md:pt-24">
-      <h3 className="text-xl md:text-2xl text-foreground mb-8">{heading || 'Past Seminars'}</h3>
-      <div className="grid gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-3">
+    <Section compact className="bg-white pt-12 md:pt-24">
+      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-8">{heading || 'Past Seminars'}</h3>
+      <div className="grid grid-cols-2 gap-5 sm:gap-8 md:gap-12 lg:grid-cols-3">
         {seminars.map((s) => (
           <PastSeminarCard key={s.id} seminar={s} />
         ))}

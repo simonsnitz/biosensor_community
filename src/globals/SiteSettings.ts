@@ -1,18 +1,50 @@
 import type { GlobalConfig } from 'payload'
 
+import { revalidateSiteSettings } from './hooks/revalidateSiteSettings'
+
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
   access: {
     read: () => true,
   },
+  hooks: {
+    afterChange: [revalidateSiteSettings],
+  },
   fields: [
     {
       name: 'missionStatement',
       type: 'richText',
-      label: 'Mission Statement',
+      label: 'Mission Statement (legacy)',
       admin: {
-        description: 'Shown in the homepage hero.',
+        description:
+          'Legacy field, no longer used. Edit "About text" and "Mission text" below instead.',
+      },
+    },
+    {
+      name: 'aboutText',
+      type: 'textarea',
+      label: 'About text',
+      admin: {
+        description:
+          'Shown under the "About" heading on the homepage. Separate paragraphs with a blank line.',
+      },
+    },
+    {
+      name: 'missionText',
+      type: 'textarea',
+      label: 'Mission text',
+      admin: {
+        description:
+          'Shown under the "Mission statement" heading on the homepage. Separate paragraphs with a blank line.',
+      },
+    },
+    {
+      name: 'footerTagline',
+      type: 'textarea',
+      label: 'Footer tagline',
+      admin: {
+        description: 'Short tagline shown next to the wordmark in the footer.',
       },
     },
     {

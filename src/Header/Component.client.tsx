@@ -6,13 +6,14 @@ import React, { useEffect, useState } from 'react'
 
 import type { Header } from '@/payload-types'
 
-import { HeaderNav } from './Nav'
+import { HeaderNav, type SocialLink } from './Nav'
 
 interface HeaderClientProps {
   data: Header
+  socialLinks?: SocialLink[]
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, socialLinks }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
@@ -38,9 +39,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           href="/"
           className="font-display font-bold text-base md:text-lg tracking-tight text-foreground"
         >
-          Biosensor Community
+          Biosensor Seminar Series
         </Link>
-        <HeaderNav data={data} />
+        <HeaderNav data={data} socialLinks={socialLinks} />
       </div>
     </header>
   )

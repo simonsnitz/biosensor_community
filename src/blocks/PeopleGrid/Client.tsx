@@ -8,7 +8,6 @@ import { cn } from '@/utilities/ui'
 const ROLES = [
   { value: 'organizer', label: 'Organizers' },
   { value: 'speaker', label: 'Speakers' },
-  { value: 'researcher', label: 'Researchers' },
 ] as const
 
 type RoleValue = (typeof ROLES)[number]['value']
@@ -25,7 +24,9 @@ type Props = {
  * clears the filter and shows everyone.
  */
 export const PeopleGridClient: React.FC<Props> = ({ people, limit }) => {
-  const [active, setActive] = useState<RoleValue | null>(null)
+  // Default to the Organizers tag on first paint — that's the most common
+  // home-page state, and matches the "People → Organizing Committee" feel.
+  const [active, setActive] = useState<RoleValue | null>('organizer')
 
   const filtered = useMemo(() => {
     const matched = active
@@ -61,7 +62,7 @@ export const PeopleGridClient: React.FC<Props> = ({ people, limit }) => {
       {filtered.length === 0 ? (
         <p className="text-muted-foreground">No people in this group yet.</p>
       ) : (
-        <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((p) => (
             <PersonCard key={p.id} person={p} />
           ))}
@@ -99,20 +100,20 @@ function PersonCard({ person }: { person: Person }) {
             <img
               src={photo.url}
               alt={photo.alt || person.name}
-              className="w-28 h-28 rounded-full object-cover border border-border transition hover:opacity-90"
+              className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover border border-border transition hover:opacity-90"
             />
           ) : (
-            <div className="w-28 h-28 rounded-full bg-muted border border-border" />
+            <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-muted border border-border" />
           )}
         </a>
       ) : photo?.url ? (
         <img
           src={photo.url}
           alt={photo.alt || person.name}
-          className="w-28 h-28 rounded-full object-cover border border-border"
+          className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover border border-border"
         />
       ) : (
-        <div className="w-28 h-28 rounded-full bg-muted border border-border" />
+        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-muted border border-border" />
       )}
       <div>
         {href ? (

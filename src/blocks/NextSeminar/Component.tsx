@@ -6,23 +6,90 @@ import type { NextSeminarBlock as NextSeminarBlockProps, Seminar, Person } from 
 import { Section } from '@/components/Section'
 import { seminarDisplayDate, seminarLocalTimes } from '@/utilities/seminar'
 
-async function getNextSeminar(): Promise<Seminar | null> {
-  const payload = await getPayload({ config: configPromise })
+const ABOUT_FALLBACK = `How do microbes respond to chemical cues, and can we engineer these sensors for practical applications? Research on genetically-encoded biosensors has exploded in the past two decades, and we continue to discover new mechanisms (and invent new applications) for these sensors.
 
-  const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 })
-  if (settings?.featuredSeminar && typeof settings.featuredSeminar === 'object') {
-    return settings.featuredSeminar as Seminar
+This seminar series intends to nucleate a community of scientists unearthing and repurposing nature's chemical sensors.`
+
+const MISSION_FALLBACK = `Bring together a community of scientists and bioengineers building genetically-encoded sensors to:
+1. Share research findings (emphasizing early career research)
+2. Facilitate collaboration and discussion.
+3. Teach fundamental and novel concepts to researchers in this growing field.`
+
+type HeaderData = {
+  aboutText: string
+  missionText: string
+  featured: Seminar | null
+}
+
+async function getHeaderData(): Promise<HeaderData> {
+  const payload = await getPayload({ config: configPromise })
+  const settings = (await payload.findGlobal({
+    slug: 'site-settings',
+    depth: 2,
+  })) as {
+    featuredSeminar?: Seminar | number | null
+    aboutText?: string | null
+    missionText?: string | null
   }
 
-  const todayISO = new Date().toISOString().slice(0, 10)
-  const upcoming = await payload.find({
-    collection: 'seminars',
-    where: { date: { greater_than_equal: todayISO } },
-    sort: 'date',
-    limit: 1,
-    depth: 2,
-  })
-  return (upcoming.docs[0] as Seminar) ?? null
+  const aboutText = settings?.aboutText?.trim() || ABOUT_FALLBACK
+  const missionText = settings?.missionText?.trim() || MISSION_FALLBACK
+
+  let featured: Seminar | null = null
+  if (settings?.featuredSeminar && typeof settings.featuredSeminar === 'object') {
+    featured = settings.featuredSeminar as Seminar
+  } else {
+    const todayISO = new Date().toISOString().slice(0, 10)
+    const upcoming = await payload.find({
+      collection: 'seminars',
+      where: { date: { greater_than_equal: todayISO } },
+      sort: 'date',
+      limit: 1,
+      depth: 2,
+    })
+    featured = (upcoming.docs[0] as Seminar) ?? null
+  }
+
+  return { aboutText, missionText, featured }
+}
+
+/**
+ * Render textarea content as paragraphs split on blank lines.
+ *
+ * Within a paragraph, lines that start with `N. ` (e.g. "1. Share research
+ * findings") are treated as numbered items: the leading number stays in the
+ * text but the whole line is indented so the list reads cleanly. Non-list
+ * paragraphs use `whitespace-pre-line` to preserve any manual line breaks.
+ */
+function Paragraphs({ text }: { text: string }) {
+  const paragraphs = text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+  return (
+    <>
+      {paragraphs.map((para, i) => {
+        const lines = para.split('\n').map((l) => l.trim()).filter(Boolean)
+        const hasNumberedItem = lines.some((l) => /^\d+\.\s/.test(l))
+        if (!hasNumberedItem) {
+          return (
+            <p key={i} className="whitespace-pre-line">
+              {para}
+            </p>
+          )
+        }
+        return (
+          <div key={i} className="space-y-2">
+            {lines.map((line, j) => {
+              const isItem = /^\d+\.\s/.test(line)
+              return (
+                <div key={j} className={isItem ? 'pl-8' : ''}>
+                  {line}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })}
+    </>
+  )
 }
 
 /**
@@ -35,19 +102,26 @@ export const NextSeminarBlock: React.FC<NextSeminarBlockProps> = async ({
   heading,
   showWhenNone,
 }) => {
-  const seminar = await getNextSeminar()
+  const { aboutText, missionText, featured: seminar } = await getHeaderData()
   const subheading = heading || 'Next Seminar'
 
   return (
     <Section compact className="bg-white pb-0 md:pb-0">
-      <header className="mb-14 md:mb-16">
-        <h2 className="text-5xl md:text-6xl lg:text-7xl text-foreground">Seminar Series</h2>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-          A monthly seminar series held on the first Wednesday of every month at 12 PM ET.
-        </p>
-      </header>
+      <div className="mb-12 md:mb-16">
+        <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">About</h3>
+        <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-none">
+          <Paragraphs text={aboutText} />
+        </div>
+      </div>
 
-      <h3 className="text-xl md:text-2xl text-foreground mb-8">{subheading}</h3>
+      <div className="mb-14 md:mb-20">
+        <h3 className="text-xl md:text-2xl font-bold text-foreground mb-4">Mission statement</h3>
+        <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-none">
+          <Paragraphs text={missionText} />
+        </div>
+      </div>
+
+      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-8">{subheading}</h3>
 
       {!seminar ? (
         showWhenNone && (
@@ -71,7 +145,7 @@ function NextSeminarCard({ seminar }: { seminar: Seminar }) {
   return (
     <div className="grid gap-10 lg:gap-16 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
       <div>
-        <h4 className="text-3xl md:text-4xl text-foreground mb-6">{seminar.title}</h4>
+        <h4 className="text-xl sm:text-2xl md:text-3xl text-foreground mb-6">{seminar.title}</h4>
         {speakers.length > 0 && (
           <div className="mb-6 space-y-3">
             {speakers.map((s) => (
@@ -114,7 +188,7 @@ function NextSeminarCard({ seminar }: { seminar: Seminar }) {
         <img
           src={seminar.flyerImage.url}
           alt={seminar.flyerImage.alt || seminar.title}
-          className="w-full h-auto rounded-2xl border border-border"
+          className="w-full max-w-xs sm:max-w-sm lg:max-w-none mx-auto h-auto rounded-2xl border border-border"
         />
       )}
     </div>

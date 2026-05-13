@@ -10,17 +10,18 @@ export async function Footer() {
   const navItems = footerData?.navItems || []
   const socialLinks =
     (settings as { socialLinks?: { platform?: string; url?: string }[] })?.socialLinks ?? []
+  const tagline =
+    (settings as { footerTagline?: string })?.footerTagline?.trim() ||
+    'A community of scientists building genetically-encoded small molecule sensors.'
 
   return (
     <footer className="mt-auto border-t border-border">
       <div className="mx-auto max-w-6xl px-6 md:px-10 py-12 md:py-16 flex flex-col md:flex-row md:justify-between gap-8">
         <div>
           <Link href="/" className="font-display font-bold text-xl text-foreground">
-            Biosensor Community
+            Biosensor Seminar Series
           </Link>
-          <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-            A community of scientists building genetically-encoded small molecule sensors.
-          </p>
+          <p className="mt-2 text-sm text-muted-foreground max-w-sm">{tagline}</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-8 sm:gap-12">
