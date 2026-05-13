@@ -3,6 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -89,4 +90,19 @@ export const plugins: Plugin[] = [
       },
     },
   }),
+  // In production (Vercel), upload media to Vercel Blob storage instead of
+  // the local filesystem. Locally — when BLOB_READ_WRITE_TOKEN is not set —
+  // this plugin is omitted and the Media collection's `staticDir` is used
+  // (writes to `public/media/`).
+  ...(process.env.BLOB_READ_WRITE_TOKEN
+    ? [
+        vercelBlobStorage({
+          enabled: true,
+          collections: {
+            media: true,
+          },
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        }),
+      ]
+    : []),
 ]
