@@ -90,19 +90,14 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  // In production (Vercel), upload media to Vercel Blob storage instead of
-  // the local filesystem. Locally — when BLOB_READ_WRITE_TOKEN is not set —
-  // this plugin is omitted and the Media collection's `staticDir` is used
-  // (writes to `public/media/`).
-  ...(process.env.BLOB_READ_WRITE_TOKEN
-    ? [
-        vercelBlobStorage({
-          enabled: true,
-          collections: {
-            media: true,
-          },
-          token: process.env.BLOB_READ_WRITE_TOKEN,
-        }),
-      ]
-    : []),
+  // Always include the Vercel Blob plugin so its client component is
+  // registered in the admin importMap. The `enabled` flag is what actually
+  // switches behavior: when `BLOB_READ_WRITE_TOKEN` is set (prod), uploads
+  // go to Vercel Blob; when it's not (local dev), the Media collection's
+  // `staticDir` is used and the plugin is a no-op.
+  vercelBlobStorage({
+    enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    collections: { media: true },
+    token: process.env.BLOB_READ_WRITE_TOKEN ?? '',
+  }),
 ]
