@@ -27,6 +27,10 @@ export default buildConfig({
     meta: {
       titleSuffix: ' — Biosensor Community',
     },
+    components: {
+      beforeLogin: ['@/components/BeforeLogin'],
+      beforeDashboard: ['@/components/BeforeDashboard'],
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
