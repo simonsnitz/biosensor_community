@@ -12,7 +12,6 @@ import { MailingListSignupBlock } from '@/blocks/MailingListSignup/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { NextSeminarBlock } from '@/blocks/NextSeminar/Component'
 import { PastSeminarsBlock } from '@/blocks/PastSeminars/Component'
-import { PeopleDirectoryBlock } from '@/blocks/PeopleDirectory/Component'
 import { PeopleGridBlock } from '@/blocks/PeopleGrid/Component'
 import { SiteIntroBlock } from '@/blocks/SiteIntro/Component'
 
@@ -27,7 +26,6 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   nextSeminar: NextSeminarBlock,
   pastSeminars: PastSeminarsBlock,
-  peopleDirectory: PeopleDirectoryBlock,
   peopleGrid: PeopleGridBlock,
   siteIntro: SiteIntroBlock,
 }

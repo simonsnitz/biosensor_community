@@ -13,15 +13,6 @@ export const SiteSettings: GlobalConfig = {
   },
   fields: [
     {
-      name: 'missionStatement',
-      type: 'richText',
-      label: 'Mission Statement (legacy)',
-      admin: {
-        description:
-          'Legacy field, no longer used. Edit "About text" and "Mission text" below instead.',
-      },
-    },
-    {
       name: 'aboutText',
       type: 'textarea',
       label: 'About text',

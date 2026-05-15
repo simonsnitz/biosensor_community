@@ -12,7 +12,6 @@ import { MailingListSignup } from '../../blocks/MailingListSignup/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { NextSeminar } from '../../blocks/NextSeminar/config'
 import { PastSeminars } from '../../blocks/PastSeminars/config'
-import { PeopleDirectory } from '../../blocks/PeopleDirectory/config'
 import { PeopleGrid } from '../../blocks/PeopleGrid/config'
 import { SiteIntro } from '../../blocks/SiteIntro/config'
 import { hero } from '@/heros/config'
@@ -85,7 +84,6 @@ export const Pages: CollectionConfig<'pages'> = {
                 DividerBlock,
                 NextSeminar,
                 PastSeminars,
-                PeopleDirectory,
                 PeopleGrid,
                 FAQsList,
                 MailingListSignup,
