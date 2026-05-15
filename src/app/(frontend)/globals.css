@@ -183,17 +183,29 @@
     @apply border-border outline-ring/50;
   }
   body {
-    /* Faint yellow-green at the top → light blue at the bottom. Low chroma
-       keeps the gradient subtle behind text. `fixed` attachment so the
-       gradient anchors to the viewport, not the document length. */
+    @apply text-foreground min-h-[100vh] flex flex-col;
+  }
+  /*
+   * Faint yellow-green at the top → light blue at the bottom. We render
+   * the gradient as a fixed-positioned pseudo-element behind everything
+   * rather than via `background-attachment: fixed` on `body`, because iOS
+   * Safari (and some Android browsers) ignore `fixed` attachment and fall
+   * back to `scroll` — which scales the gradient to the full document
+   * height. A fixed pseudo-element keeps the gradient viewport-sized on
+   * every device.
+   */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background: linear-gradient(
       to bottom,
       oklch(96% 0.038 115deg) 0%,
       oklch(94% 0.025 160deg) 45%,
       oklch(93% 0.04 230deg) 100%
     );
-    background-attachment: fixed;
-    @apply text-foreground min-h-[100vh] flex flex-col;
   }
 }
 
