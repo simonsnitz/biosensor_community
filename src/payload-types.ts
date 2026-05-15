@@ -208,7 +208,6 @@ export interface Page {
     | DividerBlock
     | NextSeminarBlock
     | PastSeminarsBlock
-    | PeopleDirectoryBlock
     | PeopleGridBlock
     | FAQsListBlock
     | MailingListSignupBlock
@@ -477,20 +476,6 @@ export interface PastSeminarsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'pastSeminars';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PeopleDirectoryBlock".
- */
-export interface PeopleDirectoryBlock {
-  heading?: string | null;
-  /**
-   * Optional intro text shown above the filters.
-   */
-  intro?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'peopleDirectory';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1306,7 +1291,6 @@ export interface PagesSelect<T extends boolean = true> {
         divider?: T | DividerBlockSelect<T>;
         nextSeminar?: T | NextSeminarBlockSelect<T>;
         pastSeminars?: T | PastSeminarsBlockSelect<T>;
-        peopleDirectory?: T | PeopleDirectoryBlockSelect<T>;
         peopleGrid?: T | PeopleGridBlockSelect<T>;
         faqsList?: T | FAQsListBlockSelect<T>;
         mailingListSignup?: T | MailingListSignupBlockSelect<T>;
@@ -1367,16 +1351,6 @@ export interface NextSeminarBlockSelect<T extends boolean = true> {
 export interface PastSeminarsBlockSelect<T extends boolean = true> {
   heading?: T;
   limit?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PeopleDirectoryBlock_select".
- */
-export interface PeopleDirectoryBlockSelect<T extends boolean = true> {
-  heading?: T;
-  intro?: T;
   id?: T;
   blockName?: T;
 }
@@ -2041,24 +2015,6 @@ export interface Footer {
 export interface SiteSetting {
   id: number;
   /**
-   * Legacy field, no longer used. Edit "About text" and "Mission text" below instead.
-   */
-  missionStatement?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
    * Shown under the "About" heading on the homepage. Separate paragraphs with a blank line.
    */
   aboutText?: string | null;
@@ -2141,7 +2097,6 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  missionStatement?: T;
   aboutText?: T;
   missionText?: T;
   footerTagline?: T;
