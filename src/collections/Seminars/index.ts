@@ -1,8 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
 import { slugField } from 'payload'
+
+import { revalidateSeminar, revalidateSeminarOnDelete } from './hooks/revalidateSeminar'
 
 export const Seminars: CollectionConfig = {
   slug: 'seminars',
@@ -20,6 +22,10 @@ export const Seminars: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'speakers'],
     description: 'Monthly seminars. Time is always 12:00 PM ET.',
+  },
+  hooks: {
+    afterChange: [revalidateSeminar],
+    afterDelete: [revalidateSeminarOnDelete],
   },
   fields: [
     {
