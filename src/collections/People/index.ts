@@ -1,8 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
 import { slugField } from 'payload'
+
+import { revalidatePerson, revalidatePersonOnDelete } from './hooks/revalidatePerson'
 
 export const People: CollectionConfig = {
   slug: 'people',
@@ -19,6 +21,10 @@ export const People: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'affiliation', 'roles'],
+  },
+  hooks: {
+    afterChange: [revalidatePerson],
+    afterDelete: [revalidatePersonOnDelete],
   },
   fields: [
     {

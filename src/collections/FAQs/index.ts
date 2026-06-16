@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
+
+import { revalidateFAQ, revalidateFAQOnDelete } from './hooks/revalidateFAQ'
 
 export const FAQs: CollectionConfig = {
   slug: 'faqs',
@@ -20,6 +22,10 @@ export const FAQs: CollectionConfig = {
     defaultColumns: ['question', 'order'],
   },
   defaultSort: 'order',
+  hooks: {
+    afterChange: [revalidateFAQ],
+    afterDelete: [revalidateFAQOnDelete],
+  },
   fields: [
     {
       name: 'question',
